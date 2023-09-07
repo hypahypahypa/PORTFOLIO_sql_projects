@@ -110,4 +110,39 @@ FROM
 WHERE uq.price_rank = 1
 
 -- Задание 11
--- 
+-- Найдите среднюю скорость ПК.
+SELECT AVG(speed)
+FROM pc;
+
+-- Задание 12
+-- Найдите среднюю скорость ПК-блокнотов, цена которых превышает 1000 дол.
+SELECT AVG(speed)
+FROM laptop
+WHERE price > 1000;
+
+-- Задание 13
+-- Найдите среднюю скорость ПК, выпущенных производителем A.
+SELECT AVG(pc.speed)
+FROM pc
+JOIN product ON pc.model = product.model
+WHERE maker = 'A';
+
+-- Задание 14
+-- Найдите класс, имя и страну для кораблей из таблицы Ships, имеющих не менее 10 орудий.
+-- Здесь потребуется DB_Ships
+SELECT c.class, s.name, c.country
+FROM classes c
+JOIN ships s
+	ON c.class = s.class
+WHERE c.numguns >= 10;
+
+-- Задание 15
+-- Найдите размеры жестких дисков, совпадающих у двух и более PC. 
+-- Вывести: HD
+SELECT uq.hd
+FROM
+	(SELECT hd, rank() OVER(ORDER BY hd) AS hd_rank
+	FROM pc
+	) uq
+GROUP BY uq.hd
+HAVING count(uq.hd_rank) >= 2;
