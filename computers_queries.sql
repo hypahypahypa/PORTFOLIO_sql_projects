@@ -165,6 +165,20 @@ JOIN PC L
        L.ram = S.ram AND 
        L.model < P.model;
 
+-- Задание 16. Вариант решения 2.
+SELECT MAX(model1), MIN(model2), MAX(speed), MAX(ram) 
+FROM (SELECT pc1.model AS model1, pc2.model AS model2, pc1.speed, pc2.ram, 
+             CASE WHEN CAST(pc1.model AS NUMERIC(6,2)) > 
+                       CAST(pc2.model AS NUMERIC(6,2)) 
+                  THEN pc1.model+pc2.model  
+                  ELSE pc2.model+pc1.model  
+             END AS sm 
+      FROM PC pc1, PC pc2 
+      WHERE pc1.speed = pc2.speed AND 
+            pc1.ram = pc2.ram AND 
+            pc1.model <> pc2.model
+      ) a 
+GROUP BY a.sm
 
 -- Задание 17
 -- Найдите модели ПК-блокнотов, скорость которых меньше скорости каждого из ПК.
