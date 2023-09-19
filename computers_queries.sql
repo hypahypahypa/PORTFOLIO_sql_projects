@@ -191,9 +191,13 @@ WHERE l.speed < ALL (SELECT pc.speed FROM pc)
 -- Перечислите номера моделей любых типов, имеющих самую высокую цену по всей имеющейся в базе данных продукции.
 WITH mp AS (
   SELECT model, price FROM pc
+	
   UNION
+	
   SELECT model, price FROM printer
+	
   UNION
+	
   SELECT model, price FROM laptop
 )
 SELECT model FROM mp 
