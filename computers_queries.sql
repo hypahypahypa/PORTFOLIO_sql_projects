@@ -202,3 +202,16 @@ WITH mp AS (
 )
 SELECT model FROM mp 
 WHERE price = (SELECT max(price) FROM mp);
+
+--
+select
+  ROW_NUMBER() OVER(ORDER BY count desc, maker asc, model asc) rownum
+  , maker
+  , model
+  from (
+    -- tmp table with count of models for each maker
+    select
+      count(model) over(partition by maker) as count
+      , p.*
+    from product p
+  ) p
