@@ -205,9 +205,9 @@ WHERE price = (SELECT max(price) FROM mp);
 
 --
 select
-  ROW_NUMBER() OVER(ORDER BY count desc, maker asc, model asc) rownum
-  , maker
-  , model
+  ROW_NUMBER() OVER(ORDER BY count desc, maker asc, model asc) rownum, 
+	maker, 
+	model
   from (
     -- tmp table with count of models for each maker
     select
@@ -215,3 +215,23 @@ select
       , p.*
     from product p
   ) p
+
+--
+with M as (
+select maker from product p
+where
+  model in (
+  -- model with MIN ram AND
+  -- MAX speed in MIN ram models
+    select model from pc
+    where
+      ram=(select min(ram) from pc)
+      and speed=(
+        -- max speed from pc with minimum RAN
+        select max(speed) from pc
+        where ram=(select min(ram) from pc)
+      )
+  )
+)
+select distinct maker from product
+where type='Printer' and maker in (select maker from M)
