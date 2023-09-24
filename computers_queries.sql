@@ -281,3 +281,10 @@ with sh as (
 select country from a
 group by country
 having count(distinct name)=sum(sunk)
+
+-- Используя таблицу Product, определить количество производителей, выпускающих по одной модели.
+select count(q.cm) "count of makers" from (
+  select count(model) cm from product
+  group by maker
+  having count(model)=1
+) q
