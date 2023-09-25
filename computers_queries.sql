@@ -288,3 +288,13 @@ select count(q.cm) "count of makers" from (
   group by maker
   having count(model)=1
 ) q
+
+-- Задание 29
+-- В предположении, что приход и расход денег на каждом пункте приема фиксируется не чаще одного раза в день [т.е. первичный ключ (пункт, дата)], написать запрос с выходными данными (пункт, дата, приход, расход). Использовать таблицы Income_o и Outcome_o.
+select
+  isnull(i.point, o.point) point
+  , isnull(i.date, o.date) [date]
+  , inc
+  , out
+  from income_o i full outer join outcome_o o 
+    on i.date=o.date and i.point=o.point
