@@ -298,3 +298,16 @@ select
   , out
   from income_o i full outer join outcome_o o 
     on i.date=o.date and i.point=o.point
+
+-- Задание 30
+-- В предположении, что приход и расход денег на каждом пункте приема фиксируется произвольное число раз (первичным ключом в таблицах является столбец code), 
+-- требуется получить таблицу, в которой каждому пункту за каждую дату выполнения операций будет соответствовать одна строка. Вывод: point, date, суммарный расход пункта за день (out), суммарный приход пункта за день (inc). Отсутствующие значения считать неопределенными (NULL).
+select
+ isnull(i.point, o.point) point
+  , isnull(i.date, o.date) date
+  , sum(o.out) outcome
+  , sum(i.inc) income
+  from income i
+  full join outcome o
+    on i.point=o.point and i.date=o.date and i.code=o.code
+  group by isnull(i.point, o.point), isnull(i.date, o.date)
