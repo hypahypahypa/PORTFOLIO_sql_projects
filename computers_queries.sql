@@ -311,3 +311,16 @@ select
   full join outcome o
     on i.point=o.point and i.date=o.date and i.code=o.code
   group by isnull(i.point, o.point), isnull(i.date, o.date)
+
+-- Задание 32
+-- Одной из характеристик корабля является половина куба калибра его главных орудий (mw). С точностью до 2 десятичных знаков определите среднее значение mw для кораблей каждой страны, у которой есть корабли в базе данных.
+with w as (
+  select country, name, bore from classes c join ships s on c.class=s.class
+  union
+  select country, ship, bore from classes c join outcomes o on c.class=o.ship
+)
+select
+  w.country
+  , ROUND(AVG(w.bore*w.bore*w.bore*0.5), 2) as weight
+  from w
+  group by w.country
