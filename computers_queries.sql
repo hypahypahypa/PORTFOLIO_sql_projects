@@ -337,3 +337,13 @@ select
   , ROUND(AVG(w.bore*w.bore*w.bore*0.5), 2) as weight
   from w
   group by w.country
+
+-- Задание 34
+-- По Вашингтонскому международному договору от начала 1922 г. запрещалось строить линейные корабли водоизмещением более 35 тыс.тонн. Укажите корабли, нарушившие этот договор (учитывать только корабли c известным годом спуска на воду). 
+-- Вывести названия кораблей.
+Select s.name from ships s
+  join classes c on s.class=c.class
+  where
+    s.launched >= 1922
+    and c.displacement > 35000
+    and type='bb'
