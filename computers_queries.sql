@@ -347,3 +347,10 @@ Select s.name from ships s
     s.launched >= 1922
     and c.displacement > 35000
     and type='bb'
+
+-- Задание 35
+-- В таблице Product найти модели, которые состоят только из цифр или только из латинских букв (A-Z, без учета регистра). 
+-- Вывод: номер модели, тип модели. (Всё это было бы проще, если бы оно умело в регулярные выражения(?)).
+select model, type from product
+ where
+  model not like '%[^0-9]%' or model not like '%[^a-z]%'
