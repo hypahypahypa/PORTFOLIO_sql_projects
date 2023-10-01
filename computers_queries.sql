@@ -354,3 +354,15 @@ Select s.name from ships s
 select model, type from product
  where
   model not like '%[^0-9]%' or model not like '%[^a-z]%'
+
+-- Задание 37
+-- Найдите классы, в которые входит только один корабль из базы данных (учесть также корабли в Outcomes).
+select q.class from (
+  select class, name from ships
+  union
+  select c.class, o.ship from classes c
+    join outcomes o on c.class=o.ship
+) q
+group by q.class
+having count(q.class)=1
+;
