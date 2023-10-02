@@ -366,3 +366,18 @@ select q.class from (
 group by q.class
 having count(q.class)=1
 ;
+
+-- Задание 39
+-- Найдите корабли, сохранившиеся для будущих сражений; т.е. выведенные из строя в одной битве (damaged), они участвовали в другой, произошедшей позже.
+SELECT
+  distinct o.ship
+  FROM outcomes o JOIN Battles b ON b.name=o.battle
+  WHERE
+    o.result = 'damaged'
+    and EXISTS(
+      SELECT *
+      FROM outcomes o2 JOIN Battles b2 ON b2.name=o2.battle
+      WHERE
+        o2.ship=o.ship
+        and b2.date > b.date
+    )
