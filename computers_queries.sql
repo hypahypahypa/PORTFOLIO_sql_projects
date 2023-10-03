@@ -381,3 +381,26 @@ SELECT
         o2.ship=o.ship
         and b2.date > b.date
     )
+
+-- Задание 41
+-- Для ПК с максимальным кодом из таблицы PC вывести все его характеристики (кроме кода) в два столбца:
+-- название характеристики (имя соответствующего столбца в таблице PC);
+-- значение характеристики
+-- NOTE решение не принимается, "несовпадение данных" (потому, что начальная длина строк в 10 байт оказалась недостаточной)
+select fields, nullif(value,'x') value from
+(
+  Select
+    cast(model as NVARCHAR(50)) as model
+  , cast (speed as NVARCHAR(50)) as speed
+  , cast(ram as NVARCHAR(50)) as ram
+  , cast(hd as NVARCHAR(50)) as hd
+  , cast(cd as NVARCHAR(50)) as cd
+  --, cast(price as NVARCHAR(50)) as price
+  , COALESCE(CAST(price as NVARCHAR(50)),'x') as price
+  from PC
+  where code = (Select max(code) from PC)
+) as t
+unpivot
+(
+  value for fields in (model, speed, ram, hd, cd, price)
+) as unp
