@@ -404,3 +404,9 @@ unpivot
 (
   value for fields in (model, speed, ram, hd, cd, price)
 ) as unp
+
+-- Задание 45
+-- Найдите названия всех кораблей в базе данных, состоящие из трех и более слов (например, King George V). Считать, что слова в названиях разделяются единичными пробелами, и нет концевых пробелов.
+select name from ships where name like '_% _% _%'
+union
+select ship from outcomes where ship like '_% _% _%'
