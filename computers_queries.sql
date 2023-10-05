@@ -410,3 +410,23 @@ unpivot
 select name from ships where name like '_% _% _%'
 union
 select ship from outcomes where ship like '_% _% _%'
+
+-- Задание 46
+-- Для каждого корабля, участвовавшего в сражении при Гвадалканале (Guadalcanal), вывести название, водоизмещение и число орудий.
+with allships as (
+  select name, class from ships
+  union
+  select ship as name, ship as class from outcomes
+  where ship not in (select name from ships)
+)
+select a.name, displacement, numGuns from allships a
+  left join classes c on a.class=c.class
+  join outcomes o on a.name=o.ship and o.battle='Guadalcanal';
+
+-- More optimal
+SELECT
+  ship, displacement, numGuns
+  FROM Outcomes A
+    LEFT JOIN Ships C ON A.ship = C.name
+    LEFT JOIN Classes B ON A.ship = B.class OR C.class = B.class
+  WHERE battle = 'Guadalcanal'
