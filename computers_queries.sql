@@ -430,3 +430,19 @@ SELECT
     LEFT JOIN Ships C ON A.ship = C.name
     LEFT JOIN Classes B ON A.ship = B.class OR C.class = B.class
   WHERE battle = 'Guadalcanal'
+
+-- Задание 47
+-- Пронумеровать строки из таблицы Product в следующем порядке: 
+-- имя производителя в порядке убывания числа производимых им моделей (при одинаковом числе моделей имя производителя в алфавитном порядке по возрастанию), 
+-- номер модели (по возрастанию). Вывод: номер в соответствии с заданным порядком, имя производителя (maker), модель (model)
+select
+  ROW_NUMBER() OVER(ORDER BY count desc, maker asc, model asc) rownum
+  , maker
+  , model
+  from (
+    -- tmp table with count of models for each maker
+    select
+      count(model) over(partition by maker) as count
+      , p.*
+    from product p
+  ) p
