@@ -446,3 +446,10 @@ select
       , p.*
     from product p
   ) p
+
+-- Задание 48
+-- Найдите классы кораблей, в которых хотя бы один корабль был потоплен в сражении.
+select distinct c.class from outcomes o
+  left join ships s on o.ship = s.name
+  join classes c on (o.ship=c.class or s.class=c.class)
+where result = 'sunk'
