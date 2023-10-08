@@ -453,3 +453,21 @@ select distinct c.class from outcomes o
   left join ships s on o.ship = s.name
   join classes c on (o.ship=c.class or s.class=c.class)
 where result = 'sunk'
+
+-- Задание 49
+select name from ships s join classes c on s.class=c.class
+where bore=16
+union
+select ship from outcomes o join classes c on o.ship=c.class
+where bore=16
+
+-- one more solution (more effective)
+select
+  name
+  from (
+    select name, class from ships
+    union
+    select ship, ship from outcomes
+  ) q
+  join classes c on q.class=c.class
+  where bore=16
