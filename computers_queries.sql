@@ -471,3 +471,9 @@ select
   ) q
   join classes c on q.class=c.class
   where bore=16
+
+-- Задание 50
+select distinct battle from outcomes o
+  join ships s on o.ship=s.name
+  join classes c on c.class=s.class
+where c.class='Kongo'
