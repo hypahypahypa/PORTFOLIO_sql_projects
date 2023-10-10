@@ -477,3 +477,21 @@ select distinct battle from outcomes o
   join ships s on o.ship=s.name
   join classes c on c.class=s.class
 where c.class='Kongo'
+
+-- Задание 51
+with sh as (
+  -- все корабли и их классы
+  select name, class from ships
+  union
+  select ship, ship from outcomes
+)
+select
+  name
+  from sh join classes c on sh.class=c.class
+  where numguns >= all(
+    select ci.numguns from classes ci
+      where ci.displacement=c.displacement
+      -- это на случай (из подсказки) что может быть класс корабля,
+      -- но при том самого корабля может не быть в бд
+        and ci.class in (select sh.class from sh)
+    )
