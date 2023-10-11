@@ -495,3 +495,13 @@ select
       -- но при том самого корабля может не быть в бд
         and ci.class in (select sh.class from sh)
     )
+
+-- Задание 52
+select
+  s.name
+  from ships s
+  join classes c on c.class=s.class
+  where country='Japan'
+    and type='bb' and (numguns>=9 or numguns is null)
+    and (bore<19 or bore is null)
+    and (displacement<=65000 or displacement is null)
