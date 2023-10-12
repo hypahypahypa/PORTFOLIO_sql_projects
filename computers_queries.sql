@@ -505,3 +505,9 @@ select
     and type='bb' and (numguns>=9 or numguns is null)
     and (bore<19 or bore is null)
     and (displacement<=65000 or displacement is null)
+
+-- Задание 53
+select
+  cast(avg(numguns*1.0) as numeric(6,2)) as "avg numguns"
+  from classes
+  where type='bb'
