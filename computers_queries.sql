@@ -511,3 +511,15 @@ select
   cast(avg(numguns*1.0) as numeric(6,2)) as "avg numguns"
   from classes
   where type='bb'
+
+-- Задание 54
+select
+  cast(avg(numguns*1.0) as numeric(6,2)) as "avg numguns"
+  from (
+    -- все корабли(которые есть в базе) и их классы
+    select name, class from ships
+    union
+    select ship, ship from outcomes
+  ) s
+  join classes c on s.class=c.class
+where type='bb'
