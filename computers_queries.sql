@@ -520,6 +520,14 @@ select
     select name, class from ships
     union
     select ship, ship from outcomes
+
+	-- Задание 55
+	select
+  c.class
+  , min(launched) "launch year"
+  from classes c
+  full join ships s on c.class=s.class
+  group by c.class
   ) s
   join classes c on s.class=c.class
 where type='bb'
