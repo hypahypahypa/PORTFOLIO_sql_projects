@@ -531,3 +531,13 @@ select
   ) s
   join classes c on s.class=c.class
 where type='bb'
+
+-- Задание 55
+-- Для каждого класса определите год, когда был спущен на воду первый корабль этого класса. Если год спуска на воду головного корабля неизвестен, определите минимальный год спуска на воду кораблей этого класса. 
+-- Вывести: класс, год.
+select
+  c.class
+  , min(launched) "launch year"
+  from classes c
+  full join ships s on c.class=s.class
+  group by c.class
