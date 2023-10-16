@@ -541,3 +541,20 @@ select
   from classes c
   full join ships s on c.class=s.class
   group by c.class
+
+-- Задание 56
+-- Для каждого класса определите число кораблей этого класса, потопленных в сражениях. 
+-- Вывести: класс и число потопленных кораблей.
+select
+  class
+  , SUM(CASE WHEN result='sunk' THEN 1 ELSE 0 END) as sunks
+  from (
+    -- все корабли для имеющихся в базе классов кораблей
+    select c.class, name from classes c
+      left join ships s on c.class=s.class
+    union
+    select class, ship from classes
+      join outcomes on class=ship
+  ) as sh
+  left join outcomes o on sh.name=o.ship
+  group by class
