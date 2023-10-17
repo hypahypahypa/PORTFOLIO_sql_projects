@@ -558,3 +558,28 @@ select
   ) as sh
   left join outcomes o on sh.name=o.ship
   group by class
+
+-- Задание 57
+-- Для классов, имеющих потери в виде потопленных кораблей и не менее 3 кораблей в базе данных, вывести имя класса и число потопленных кораблей.
+select
+  class
+  , SUM(CASE WHEN result='sunk' THEN 1 ELSE 0 END) as sunks
+  from (
+    select c.class, name from classes c
+      join ships s on c.class=s.class
+    union
+    select class, ship from classes 
+      join outcomes on class=ship
+  ) as sh
+  left join outcomes o on sh.name=o.ship
+  group by class
+  having
+    SUM(CASE WHEN result='sunk' THEN 1 ELSE 0 END) > 0
+    and (select count(si.name) from (
+            select s.name, s.class from ships s
+            union
+            select o.ship, o.ship from outcomes o
+          ) as si
+        where si.class = sh.class
+        group by si.class
+        )>=3
