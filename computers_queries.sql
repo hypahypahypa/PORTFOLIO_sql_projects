@@ -583,3 +583,33 @@ select
         where si.class = sh.class
         group by si.class
         )>=3
+
+-- Задание 58
+-- Для каждого типа продукции и каждого производителя из таблицы Product c точностью до двух десятичных знаков найти процентное отношение числа моделей данного типа данного производителя к общему числу моделей этого производителя. 
+-- Вывод: maker, type, процентное отношение числа моделей данного типа к общему числу моделей производителя
+select distinct
+  maker, type
+  -- кол-во моделей каждого типа у каждого производителя
+  --, count(model) over(partition by maker, type) as mod_type_count
+  -- общее число моделей для каждого производителя
+  --, count(model) over(partition by maker) as maker_models_total
+  , cast(ROUND((
+      count(model) over(partition by maker, type))*100.0/
+      count(model) over(partition by maker)
+    ,2) as NUMERIC(5,2))
+      as 'mods of type / mods total, %'
+  from (
+    select
+      pt.maker, pt.type, p.model
+      from (
+      -- Комбинация(1) всех типов моделей
+      -- и всех производителей
+        select distinct a.maker, b.type
+        from product a, product b
+      ) pt
+      -- (1) соединяется с моделями.
+      -- Если производитель не выпускает какой-то тип продукта
+      -- то такая модель будет NULL
+      left join product p on pt.maker=p.maker and pt.type=p.type
+  ) as p
+order by maker, type
