@@ -613,3 +613,16 @@ select distinct
       left join product p on pt.maker=p.maker and pt.type=p.type
   ) as p
 order by maker, type
+
+-- Задание 60
+-- Посчитать остаток денежных средств на начало дня 15/04/01 на каждом пункте приема для базы данных с отчетностью не чаще одного раза в день. Вывод: пункт, остаток. Замечание. Не учитывать пункты, информации о которых нет до указанной даты.
+select
+  coalesce(i.point,o.point) as point
+  ,sum(coalesce(inc,0))-sum(coalesce(out,0)) as remain
+  from income_o i
+  full join outcome_o o on i.date=o.date and i.point=o.point
+  -- "на начало дня" значит
+  -- ДО УКАЗАННОЙ ДАТЫ (раньше указанной даты)
+  where coalesce(i.date,o.date) < '2001-04-15'
+group by coalesce(i.point,o.point)
+order by 1,2
