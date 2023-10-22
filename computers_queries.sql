@@ -633,3 +633,10 @@ select
   sum(coalesce(inc,0))-sum(coalesce(out,0)) as remain
   from income_o i
   full join outcome_o o on i.date=o.date and i.point=o.point
+
+-- Задание 61
+-- Посчитать остаток денежных средств на всех пунктах приема для базы данных с отчетностью не чаще одного раза в день.
+select
+  sum(coalesce(inc,0))-sum(coalesce(out,0)) as remain
+  from income_o i
+  full join outcome_o o on i.date=o.date and i.point=o.point
